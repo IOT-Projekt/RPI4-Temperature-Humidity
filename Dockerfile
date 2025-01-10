@@ -18,4 +18,4 @@ COPY app/ /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Führe das Skript aus
-CMD ["python", "main.py"]
+CMD ["python", "send_mqtt.py"]
