@@ -66,7 +66,9 @@ def send_mqtt(data):
         "humidity": data["humidity"],
         "timestamp": data["timestamp"]
     })        
-    client.publish(TOPIC_HUMIDITY, humidity_payload).wait_for_publish()
+    
+    message_info = client.publish(TOPIC_HUMIDITY, humidity_payload).wait_for_publish()
+    print(message_info)
     print(f"Feuchtigkeit gesendet: {humidity_payload}")
 
 if __name__ == "__main__":
@@ -76,7 +78,7 @@ if __name__ == "__main__":
             sensor_data = read_sensor()
             if sensor_data:  # Sicherstellen, dass Sensordaten nicht `None` sind
                 send_mqtt(sensor_data)
-            time.sleep(2.0)
+            time.sleep(10.0)
     except KeyboardInterrupt:
         print("Beenden...")
         client.loop_stop()  # Beendet die MQTT-Netzwerkkommunikation
