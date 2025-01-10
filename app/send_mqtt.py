@@ -38,19 +38,16 @@ def on_connect(client, userdata, flags, rc):
 def on_publish(client, userdata, mid):
     print(f"Nachricht mit ID {mid} veröffentlicht")
 
-def on_log(client, userdata, level, buf):
-    print(f"Log: {buf}")
 
 client.on_connect = on_connect
 client.on_publish = on_publish
-client.on_log = on_log
 
 # Verbinden mit dem Broker
 client.connect(BROKER, PORT, keepalive=60)
 
 def send_mqtt(data):
     """Sendet Daten an den MQTT-Broker."""
-    if data is None: # Sicherstellen, dass Daten nicht `None` sind
+    if data is None: 
         return
 
     # Sende Feuchtigkeitsdaten
@@ -60,28 +57,24 @@ def send_mqtt(data):
         "humidity": data["humidity"],
         "timestamp": data["timestamp"]
     })        
-    client.publish(TOPIC_HUMIDITY, humidity_payload).wait_for_publish()
+    client.publish(TOPIC_HUMIDITY, humidity_payload)
     print(f"Feuchtigkeit gesendet: {humidity_payload}")
     
-        # Sende Temperaturdaten
+    # Sende Temperaturdaten
     temperature_payload = json.dumps({
         "source" : "mqtt",
         "device_id" : CLIENT_ID,
         "temperature_c": data["temperature_c"],
         "timestamp": data["timestamp"]
     })
-    client.publish(TOPIC_TEMPERATURES, temperature_payload).wait_for_publish()
+    client.publish(TOPIC_TEMPERATURES, temperature_payload)
     print(f"Temperaturen gesendet: {temperature_payload}")
 
 if __name__ == "__main__":
     client.loop_start()  # Startet die MQTT-Netzwerkkommunikation im Hintergrund
-    try:
-        while True:
-            sensor_data = read_sensor()
-            if sensor_data:  # Sicherstellen, dass Sensordaten nicht `None` sind
-                send_mqtt(sensor_data)
-            time.sleep(10.0)
-    except KeyboardInterrupt:
-        print("Beenden...")
-        client.loop_stop()  # Beendet die MQTT-Netzwerkkommunikation
-        client.disconnect()  # Trennt die Verbindung zum Broker
+
+    while True:
+        sensor_data = read_sensor()
+        if sensor_data:  # Sicherstellen, dass Sensordaten nicht `None` sind
+            send_mqtt(sensor_data)
+        time.sleep(2.0)
