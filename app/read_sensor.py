@@ -12,6 +12,7 @@ def read_sensor():
         return {
             "temperature_c": round(temperature_c, 1),
             "humidity": round(humidity, 1),
+            "timestamp": time.time()
         }
     except RuntimeError as error:
         # Fehler beim Lesen des Sensors
