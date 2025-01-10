@@ -9,12 +9,13 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Installiere die Python-Bibliotheken aus der requirements.txt
-COPY requirements.txt /tmp/
-RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
-
-# Kopiere den Rest der Anwendung (deine Skripte)
-COPY . /app/
 WORKDIR /app
 
-# Startbefehl für das Python-Skript
-CMD ["python", "send_mqtt.py"]
+# Kopiere Dateien in das Image
+COPY app/ /app/
+
+# Installiere Abhängigkeiten
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Führe das Skript aus
+CMD ["python", "main.py"]
