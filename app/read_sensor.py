@@ -4,7 +4,7 @@ import adafruit_dht
 
 def read_sensor():
     """Liest Temperatur und Feuchtigkeit vom DHT22-Sensor."""
-    dhtDevice = adafruit_dht.DHT22(board.D4, use_pulseio=False)
+    dhtDevice = adafruit_dht.DHT22(board.D2, use_pulseio=False)
     
     try:
         temperature_c = dhtDevice.temperature
