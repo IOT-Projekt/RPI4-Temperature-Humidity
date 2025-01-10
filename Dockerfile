@@ -3,10 +3,6 @@ FROM --platform=linux/arm64/v8 arm64v8/python:3.13-slim
 
 
 # Installiere Systemabhängigkeiten
-RUN apt-get update && apt-get install -y \
-    python3-dev \
-    python3-pip \
-    && rm -rf /var/lib/apt/lists/*
 
 # Installiere die Python-Bibliotheken aus der requirements.txt
 WORKDIR /app
