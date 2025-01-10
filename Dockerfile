@@ -1,11 +1,6 @@
 # Verwende ein ARM64-kompatibles Python-Image für Raspberry Pi 4 (64-Bit)
 FROM python:3.11-slim
 
-
-# Installiere Systemabhängigkeiten
-
-RUN apt-get update && apt-get install python3-rpi.gpio -y && rm -rf /var/lib/apt/lists/*
-
 # Installiere die Python-Bibliotheken aus der requirements.txt
 WORKDIR /app
 
