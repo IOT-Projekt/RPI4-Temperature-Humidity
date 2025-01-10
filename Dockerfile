@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 
-RUN apt-get install -y build-essential python3-dev libgpiod2 libmariadb-dev
+RUN apt-get install -y build-essential python3-dev libgpiod2 
 # Installiere die Python-Bibliotheken aus der requirements.txt
 WORKDIR /app
 
