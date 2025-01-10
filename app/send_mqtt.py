@@ -56,7 +56,7 @@ def send_mqtt(data):
         "temperature_c": data["temperature_c"],
         "timestamp": data["timestamp"]
     })
-    client.publish(TOPIC_TEMPERATURES, temperature_payload)
+    client.publish(TOPIC_TEMPERATURES, temperature_payload).wait_for_publish()
     print(f"Temperaturen gesendet: {temperature_payload}")
 
     # Sende Feuchtigkeitsdaten
@@ -66,7 +66,7 @@ def send_mqtt(data):
         "humidity": data["humidity"],
         "timestamp": data["timestamp"]
     })        
-    client.publish(TOPIC_HUMIDITY, humidity_payload)
+    client.publish(TOPIC_HUMIDITY, humidity_payload).wait_for_publish()
     print(f"Feuchtigkeit gesendet: {humidity_payload}")
 
 if __name__ == "__main__":
