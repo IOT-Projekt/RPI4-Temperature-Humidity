@@ -1,5 +1,5 @@
 # Verwende ein ARM64-kompatibles Python-Image für Raspberry Pi 4 (64-Bit)
-FROM arm64v8/python:3.9-slim
+FROM arm64v8/python
 
 # Installiere Systemabhängigkeiten
 RUN apt-get update && apt-get install -y \
