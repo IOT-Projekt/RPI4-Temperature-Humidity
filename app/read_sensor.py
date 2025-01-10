@@ -8,11 +8,9 @@ def read_sensor():
     
     try:
         temperature_c = dhtDevice.temperature
-        temperature_f = temperature_c * (9 / 5) + 32
         humidity = dhtDevice.humidity
         return {
             "temperature_c": round(temperature_c, 1),
-            "temperature_f": round(temperature_f, 1),
             "humidity": round(humidity, 1),
         }
     except RuntimeError as error:
@@ -29,4 +27,3 @@ if __name__ == "__main__":
         if data:
             print(data)
         time.sleep(2.0)
-

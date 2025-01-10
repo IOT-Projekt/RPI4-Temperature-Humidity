@@ -13,6 +13,7 @@ services:
       - TOPIC_HUMIDITY=${TOPIC_HUMIDITY}
       - MQTT_USERNAME=${MQTT_USERNAME}
       - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - CLIENT_ID=${CLIENT_ID}
     devices:
       - "/dev/:/dev/"  # Zugriff auf GPIO
     logging:

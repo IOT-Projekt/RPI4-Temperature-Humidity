@@ -2,6 +2,7 @@ import os
 import time
 import paho.mqtt.client as mqtt
 from read_sensor import read_sensor
+import json
 
 # Konstanten und Standardwerte
 DEFAULT_BROKER = "localhost"
@@ -18,6 +19,7 @@ TOPIC_TEMPERATURES = os.getenv("TOPIC_TEMPERATURES", DEFAULT_TOPIC_TEMPERATURES)
 TOPIC_HUMIDITY = os.getenv("TOPIC_HUMIDITY", DEFAULT_TOPIC_HUMIDITY)
 MQTT_USERNAME = os.getenv("MQTT_USERNAME", DEFAULT_USERNAME)
 MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", DEFAULT_PASSWORD)
+CLIENT_ID = os.getenv("CLIENT_ID", "dht22-sensor")
 
 # Initialisiere MQTT-Client
 client = mqtt.Client()
@@ -44,19 +46,28 @@ client.connect(BROKER, PORT, keepalive=60)
 
 def send_mqtt(data):
     """Sendet Daten an den MQTT-Broker."""
-    if data:
-        # Sende Temperaturdaten
-        temperature_payload = {
-            "temperature_c": data["temperature_c"],
-            "temperature_f": data["temperature_f"],
-        }
-        client.publish(TOPIC_TEMPERATURES, str(temperature_payload))
-        print(f"Temperaturen gesendet: {temperature_payload}")
+    if data is None: # Sicherstellen, dass Daten nicht `None` sind
+        return
+    
+    # Sende Temperaturdaten
+    temperature_payload = json.dumps({
+        "source" : "mqtt",
+        "device_id" : CLIENT_ID,
+        "temperature_c": data["temperature_c"],
+        "timestamp": data["timestamp"]
+    })
+    client.publish(TOPIC_TEMPERATURES, temperature_payload)
+    print(f"Temperaturen gesendet: {temperature_payload}")
 
-        # Sende Feuchtigkeitsdaten
-        humidity_payload = {"humidity": data["humidity"]}
-        client.publish(TOPIC_HUMIDITY, str(humidity_payload))
-        print(f"Feuchtigkeit gesendet: {humidity_payload}")
+    # Sende Feuchtigkeitsdaten
+    humidity_payload = json.dumps({
+        "source" : "mqtt",
+        "device_id" : CLIENT_ID,
+        "humidity": data["humidity"],
+        "timestamp": data["timestamp"]
+    })        
+    client.publish(TOPIC_HUMIDITY, humidity_payload)
+    print(f"Feuchtigkeit gesendet: {humidity_payload}")
 
 if __name__ == "__main__":
     client.loop_start()  # Startet die MQTT-Netzwerkkommunikation im Hintergrund
@@ -69,4 +80,4 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         print("Beenden...")
         client.loop_stop()  # Beendet die MQTT-Netzwerkkommunikation
-        client.disconnect()
+        client.disconnect()  # Trennt die Verbindung zum Broker
