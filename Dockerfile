@@ -1,6 +1,8 @@
 # Verwende ein ARM64-kompatibles Python-Image für Raspberry Pi 4 (64-Bit)
 FROM python:3.11-slim
 
+
+RUN apt-get install -y build-essential python3-dev libgpiod2 libmariadb-dev
 # Installiere die Python-Bibliotheken aus der requirements.txt
 WORKDIR /app
 
