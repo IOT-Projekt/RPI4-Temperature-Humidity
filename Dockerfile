@@ -1,6 +1,12 @@
 # Basis-Image mit Python
 FROM python:3.9-slim
 
+RUN apt-get update && apt-get install -y \
+    python3-dev \
+    python3-pip \
+    python3-rpi.gpio \
+    && rm -rf /var/lib/apt/lists/*
+
 # Setze Arbeitsverzeichnis
 WORKDIR /app
 
