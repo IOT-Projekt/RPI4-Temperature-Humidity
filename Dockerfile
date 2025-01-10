@@ -4,9 +4,7 @@ FROM --platform=linux/arm64/v8 arm64v8/python:3.13-slim
 
 # Installiere Systemabhängigkeiten
 
-RUN apt-get install -y \
-    python3-rpi.gpio\
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get install python3-rpi.gpio -y && rm -rf /var/lib/apt/lists/*
 
 # Installiere die Python-Bibliotheken aus der requirements.txt
 WORKDIR /app
