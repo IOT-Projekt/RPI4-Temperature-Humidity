@@ -1,5 +1,4 @@
 
-version: "3.9"
 services:
   sensor-service:
     image: svenschmidt1502/rpi4-temperatures-humidity

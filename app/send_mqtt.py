@@ -38,8 +38,12 @@ def on_connect(client, userdata, flags, rc):
 def on_publish(client, userdata, mid):
     print(f"Nachricht mit ID {mid} veröffentlicht")
 
+def on_log(client, userdata, level, buf):
+    print(f"Log: {buf}")
+
 client.on_connect = on_connect
 client.on_publish = on_publish
+client.on_log = on_log
 
 # Verbinden mit dem Broker
 client.connect(BROKER, PORT, keepalive=60)
@@ -48,16 +52,6 @@ def send_mqtt(data):
     """Sendet Daten an den MQTT-Broker."""
     if data is None: # Sicherstellen, dass Daten nicht `None` sind
         return
-    
-    # Sende Temperaturdaten
-    temperature_payload = json.dumps({
-        "source" : "mqtt",
-        "device_id" : CLIENT_ID,
-        "temperature_c": data["temperature_c"],
-        "timestamp": data["timestamp"]
-    })
-    client.publish(TOPIC_TEMPERATURES, temperature_payload).wait_for_publish()
-    print(f"Temperaturen gesendet: {temperature_payload}")
 
     # Sende Feuchtigkeitsdaten
     humidity_payload = json.dumps({
@@ -66,10 +60,18 @@ def send_mqtt(data):
         "humidity": data["humidity"],
         "timestamp": data["timestamp"]
     })        
-    
-    message_info = client.publish(TOPIC_HUMIDITY, humidity_payload).wait_for_publish()
-    print(message_info)
+    client.publish(TOPIC_HUMIDITY, humidity_payload).wait_for_publish()
     print(f"Feuchtigkeit gesendet: {humidity_payload}")
+    
+        # Sende Temperaturdaten
+    temperature_payload = json.dumps({
+        "source" : "mqtt",
+        "device_id" : CLIENT_ID,
+        "temperature_c": data["temperature_c"],
+        "timestamp": data["timestamp"]
+    })
+    client.publish(TOPIC_TEMPERATURES, temperature_payload).wait_for_publish()
+    print(f"Temperaturen gesendet: {temperature_payload}")
 
 if __name__ == "__main__":
     client.loop_start()  # Startet die MQTT-Netzwerkkommunikation im Hintergrund
