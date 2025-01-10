@@ -1,15 +1,14 @@
-# Verwende ein ARM-kompatibles Python-Image (z.B. für Raspberry Pi)
+# Basis-Image mit Python
 FROM python:3.9-slim
 
-# Installiere RPi.GPIO und andere Abhängigkeiten
-
-# Installiere Python-Abhängigkeiten
-COPY requirements.txt /tmp/
-RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
-
-# Kopiere deine App
-COPY . /app/
+# Setze Arbeitsverzeichnis
 WORKDIR /app
 
-# Startbefehl für das Python-Skript
+# Kopiere Dateien in das Image
+COPY app/ /app/
+
+# Installiere Abhängigkeiten
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Standardkommando: MQTT-Sender starten
 CMD ["python", "send_mqtt.py"]
