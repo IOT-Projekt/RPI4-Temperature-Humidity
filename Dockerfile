@@ -1,14 +1,19 @@
-# Basis-Image mit Python
-FROM python:3.9-slim
+# Verwende ein ARM64-kompatibles Python-Image für Raspberry Pi 4 (64-Bit)
+FROM arm64v8/python:3.9-slim
 
-# Setze Arbeitsverzeichnis
+# Installiere Systemabhängigkeiten
+RUN apt-get update && apt-get install -y \
+    python3-dev \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Installiere die Python-Bibliotheken aus der requirements.txt
+COPY requirements.txt /tmp/
+RUN pip install --upgrade pip && pip install -r /tmp/requirements.txt
+
+# Kopiere den Rest der Anwendung (deine Skripte)
+COPY . /app/
 WORKDIR /app
 
-# Kopiere Dateien in das Image
-COPY app/ /app/
-
-# Installiere Abhängigkeiten
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Standardkommando: MQTT-Sender starten
+# Startbefehl für das Python-Skript
 CMD ["python", "send_mqtt.py"]
