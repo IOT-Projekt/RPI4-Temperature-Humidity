@@ -1,3 +1,4 @@
 paho-mqtt==1.6.1
-adafruit-circuitpython.dht
+Adafruit_DHT==1.4.0
 Adafruit-Blinka==8.4.0
+RPi.GPIO==0.7.0
