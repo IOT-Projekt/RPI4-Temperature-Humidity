@@ -1,5 +1,5 @@
 # Verwende ein ARM64-kompatibles Python-Image für Raspberry Pi 4 (64-Bit)
-FROM arm64v8/python:3.9-bookworm
+FROM --platform=linux/arm64/v8 arm64v8/python:3.13-slim
 
 
 # Installiere Systemabhängigkeiten
