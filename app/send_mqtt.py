@@ -11,6 +11,7 @@ DEFAULT_TOPIC_TEMPERATURES = "iot/devices/temperatures"
 DEFAULT_TOPIC_HUMIDITY = "iot/devices/humidity"
 DEFAULT_USERNAME = None
 DEFAULT_PASSWORD = None
+SEND_MQTT_INTERVAL = 10
 
 # Umgebungsvariablen
 BROKER = os.getenv("BROKER_IP", DEFAULT_BROKER)
@@ -78,4 +79,4 @@ if __name__ == "__main__":
         sensor_data = read_sensor()
         if sensor_data:  # Sicherstellen, dass Sensordaten nicht `None` sind
             send_mqtt(sensor_data)
-        time.sleep(2.0)
+        time.sleep(SEND_MQTT_INTERVAL)
