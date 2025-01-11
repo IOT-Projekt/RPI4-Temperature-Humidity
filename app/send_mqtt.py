@@ -62,7 +62,6 @@ def send_mqtt(data):
     print(f"Feuchtigkeit gesendet: {humidity_payload}")
     
     # Sende Temperaturdaten
-    """
     temperature_payload = json.dumps({
         "source" : "mqtt",
         "device_id" : CLIENT_ID,
@@ -71,7 +70,6 @@ def send_mqtt(data):
     })
     client.publish(TOPIC_TEMPERATURES, temperature_payload)
     print(f"Temperaturen gesendet: {temperature_payload}")
-    """
 
 if __name__ == "__main__":
     client.loop_start()  # Startet die MQTT-Netzwerkkommunikation im Hintergrund
