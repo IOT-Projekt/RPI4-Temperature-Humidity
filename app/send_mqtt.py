@@ -11,7 +11,7 @@ DEFAULT_TOPIC_TEMPERATURES = "iot/devices/temperatures"
 DEFAULT_TOPIC_HUMIDITY = "iot/devices/humidity"
 DEFAULT_USERNAME = None
 DEFAULT_PASSWORD = None
-SEND_MQTT_INTERVAL = 10
+SEND_MQTT_INTERVAL = 2
 
 # Umgebungsvariablen
 BROKER = os.getenv("BROKER_IP", DEFAULT_BROKER)
