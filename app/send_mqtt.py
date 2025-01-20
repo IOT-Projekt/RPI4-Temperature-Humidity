@@ -70,7 +70,7 @@ def send_mqtt(data):
         "timestamp": data["timestamp"]
     })        
     client.publish(TOPIC_HUMIDITY, humidity_payload)
-    print(f"Feuchtigkeit gesendet: {humidity_payload}")
+    logging.info(f"Feuchtigkeit gesendet: {humidity_payload}")
     
     # Sende Temperaturdaten
     temperature_payload = json.dumps({
@@ -80,7 +80,7 @@ def send_mqtt(data):
         "timestamp": data["timestamp"]
     })
     client.publish(TOPIC_TEMPERATURES, temperature_payload)
-    print(f"Temperaturen gesendet: {temperature_payload}")
+    logging.info(f"Temperaturen gesendet: {temperature_payload}")
 
 
 if __name__ == "__main__":
