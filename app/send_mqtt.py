@@ -3,6 +3,7 @@ import time
 import paho.mqtt.client as mqtt
 from read_sensor import read_sensor
 import json
+import logging
 
 # Konstanten und Standardwerte
 DEFAULT_BROKER = "localhost"
@@ -34,20 +35,20 @@ if MQTT_USERNAME and MQTT_PASSWORD:
 # Callback-Funktionen
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
-        print("Verbunden mit dem Broker")
+        logging.info("Verbunden mit dem Broker")
         client.subscribe(TOPIC_FREQUENCY) # Subscribe to the frequency topic, if the frequency should be changed
     else:
-        print(f"Verbindung fehlgeschlagen. Code: {rc}")
+        logging.error(f"Verbindung fehlgeschlagen. Code: {rc}")
 
 def on_publish(client, userdata, mid):
-    print(f"Nachricht mit ID {mid} veröffentlicht")
+    logging.info(f"Nachricht mit ID {mid} veröffentlicht")
 
 def on_message(client, userdata, message):
-    print(f"Nachricht empfangen: {message.payload.decode()}")
+    logging.info(f"Nachricht empfangen: {message.payload.decode()}")
     if message.topic == TOPIC_FREQUENCY:
         global SEND_MQTT_INTERVAL
         SEND_MQTT_INTERVAL = int(message.payload.decode())
-        print(f"Send interval changed to {SEND_MQTT_INTERVAL} seconds")
+        logging.info(f"Send interval changed to {SEND_MQTT_INTERVAL} seconds")
 
 client.on_connect = on_connect
 client.on_publish = on_publish
@@ -69,7 +70,6 @@ def send_mqtt(data):
         "timestamp": data["timestamp"]
     })        
     client.publish(TOPIC_HUMIDITY, humidity_payload)
-    print(f"Some env: {TOPIC_HUMIDITY}, -> {humidity_payload}")
     print(f"Feuchtigkeit gesendet: {humidity_payload}")
     
     # Sende Temperaturdaten
