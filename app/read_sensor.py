@@ -21,10 +21,3 @@ def read_sensor():
     except Exception as error:
         dhtDevice.exit()
         raise error
-
-if __name__ == "__main__":
-    while True:
-        data = read_sensor()
-        if data:
-            print(data)
-        time.sleep(2.0)
