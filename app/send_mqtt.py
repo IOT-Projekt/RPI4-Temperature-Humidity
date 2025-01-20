@@ -51,7 +51,6 @@ def on_message(client, userdata, message):
     if message.topic == TOPIC_FREQUENCY:
         global SEND_MQTT_INTERVAL
         payload = json.loads(message.payload.decode())["payload"]
-        logging.info(f"Payload: {payload}, type: {type(payload)}")
         SEND_MQTT_INTERVAL = int(payload["frequency"])
         logging.info(f"Send interval changed to {SEND_MQTT_INTERVAL} seconds")
 
