@@ -35,6 +35,7 @@ if MQTT_USERNAME and MQTT_PASSWORD:
 def on_connect(client, userdata, flags, rc):
     if rc == 0:
         logging.info("Verbunden mit dem Broker")
+        client.subscribe(TOPIC_FREQUENCY)
     else:
         logging.error(f"Verbindung fehlgeschlagen. Code: {rc}")
 
