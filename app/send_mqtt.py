@@ -22,7 +22,7 @@ BROKER = os.getenv("BROKER_IP", DEFAULT_BROKER)
 PORT = int(os.getenv("BROKER_PORT", DEFAULT_PORT))
 TOPIC_TEMPERATURES = os.getenv("TOPIC_TEMPERATURES", DEFAULT_TOPIC_TEMPERATURES)
 TOPIC_HUMIDITY = os.getenv("TOPIC_HUMIDITY", DEFAULT_TOPIC_HUMIDITY)
-TOPIC_FREQUENCY = os.getenv("TOPIC_FREQUENCY", "iot/services/frequency")
+TOPIC_FREQUENCY = "iot/services/frequency"
 MQTT_USERNAME = os.getenv("MQTT_USERNAME", DEFAULT_USERNAME)
 MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", DEFAULT_PASSWORD)
 CLIENT_ID = os.getenv("CLIENT_ID", "dht22-sensor")
@@ -39,6 +39,7 @@ def on_connect(client, userdata, flags, rc):
     if rc == 0:
         logging.info("Verbunden mit dem Broker")
         client.subscribe(TOPIC_FREQUENCY)
+        logging.info(f"Abonniere {TOPIC_FREQUENCY}")
     else:
         logging.error(f"Verbindung fehlgeschlagen. Code: {rc}")
 
@@ -54,6 +55,7 @@ def on_message(client, userdata, message):
 
 client.on_connect = on_connect
 client.on_publish = on_publish
+client.on_message = on_message
 
 # Verbinden mit dem Broker
 client.connect(BROKER, PORT, keepalive=60)
