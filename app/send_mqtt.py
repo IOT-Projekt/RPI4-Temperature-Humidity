@@ -5,6 +5,9 @@ from read_sensor import read_sensor
 import json
 import logging
 
+# setup basic logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 # Konstanten und Standardwerte
 DEFAULT_BROKER = "localhost"
 DEFAULT_PORT = 1883
