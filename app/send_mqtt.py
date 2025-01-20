@@ -4,6 +4,10 @@ import paho.mqtt.client as mqtt
 from read_sensor import read_sensor
 import json
 import logging
+import threading
+
+# Create a lock for thread-safe operations
+lock = threading.Lock()
 
 # setup basic logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -49,10 +53,11 @@ def on_publish(client, userdata, mid):
 def on_message(client, userdata, message):
     logging.info(f"Nachricht empfangen: {message.payload.decode()}")
     if message.topic == TOPIC_FREQUENCY:
-        global SEND_MQTT_INTERVAL
-        payload = json.loads(message.payload.decode())["payload"]
-        SEND_MQTT_INTERVAL = int(payload["frequency"])
-        logging.info(f"Send interval changed to {SEND_MQTT_INTERVAL} seconds")
+        with lock:
+            global SEND_MQTT_INTERVAL
+            payload = json.loads(message.payload.decode())["payload"]
+            SEND_MQTT_INTERVAL = int(payload["frequency"])
+            logging.info(f"Send interval changed to {SEND_MQTT_INTERVAL} seconds")
 
 client.on_connect = on_connect
 client.on_publish = on_publish
@@ -94,4 +99,5 @@ if __name__ == "__main__":
         sensor_data = read_sensor()
         if sensor_data:  # Sicherstellen, dass Sensordaten nicht `None` sind
             send_mqtt(sensor_data)
-        time.sleep(SEND_MQTT_INTERVAL)
+        with lock:
+            time.sleep(SEND_MQTT_INTERVAL)
