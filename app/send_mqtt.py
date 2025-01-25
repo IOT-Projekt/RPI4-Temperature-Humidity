@@ -12,23 +12,17 @@ lock = threading.Lock()
 # setup basic logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Konstanten und Standardwerte
-DEFAULT_BROKER = "localhost"
-DEFAULT_PORT = 1883
-DEFAULT_TOPIC_TEMPERATURES = "iot/devices/temperatures"
-DEFAULT_TOPIC_HUMIDITY = "iot/devices/humidity"
-DEFAULT_USERNAME = None
-DEFAULT_PASSWORD = None
-SEND_MQTT_INTERVAL = 10
+# sending interval in seconds 
+send_message_interval = 10
 
 # Umgebungsvariablen
-BROKER = os.getenv("BROKER_IP", DEFAULT_BROKER)
-PORT = int(os.getenv("BROKER_PORT", DEFAULT_PORT))
-TOPIC_TEMPERATURES = os.getenv("TOPIC_TEMPERATURES", DEFAULT_TOPIC_TEMPERATURES)
-TOPIC_HUMIDITY = os.getenv("TOPIC_HUMIDITY", DEFAULT_TOPIC_HUMIDITY)
-TOPIC_FREQUENCY = "iot/services/frequency"
-MQTT_USERNAME = os.getenv("MQTT_USERNAME", DEFAULT_USERNAME)
-MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", DEFAULT_PASSWORD)
+BROKER = os.getenv("BROKER_IP", "localhost")
+PORT = int(os.getenv("BROKER_PORT", 1883))
+TOPIC_TEMPERATURES = os.getenv("TOPIC_TEMPERATURES", "iot/devices/temperatures")
+TOPIC_HUMIDITY = os.getenv("TOPIC_HUMIDITY", "iot/devices/humidity")
+TOPIC_FREQUENCY = os.getenv("TOPIC_FREQUENCY", "iot/devices/frequency")
+MQTT_USERNAME = os.getenv("MQTT_USERNAME", None)
+MQTT_PASSWORD = os.getenv("MQTT_PASSWORD", None)
 CLIENT_ID = os.getenv("CLIENT_ID", "dht22-sensor")
 
 # Initialisiere MQTT-Client
@@ -54,10 +48,10 @@ def on_message(client, userdata, message):
     logging.info(f"Nachricht empfangen: {message.payload.decode()}")
     if message.topic == TOPIC_FREQUENCY:
         with lock:
-            global SEND_MQTT_INTERVAL
+            global send_message_interval
             payload = json.loads(message.payload.decode())["payload"]
-            SEND_MQTT_INTERVAL = int(payload["frequency"])
-            logging.info(f"Send interval changed to {SEND_MQTT_INTERVAL} seconds")
+            send_message_interval = int(payload["frequency"])
+            logging.info(f"Send interval changed to {send_message_interval} seconds")
 
 client.on_connect = on_connect
 client.on_publish = on_publish
@@ -100,4 +94,4 @@ if __name__ == "__main__":
         if sensor_data:  # Sicherstellen, dass Sensordaten nicht `None` sind
             send_mqtt(sensor_data)
         with lock:
-            time.sleep(SEND_MQTT_INTERVAL)
+            time.sleep(send_message_interval)
