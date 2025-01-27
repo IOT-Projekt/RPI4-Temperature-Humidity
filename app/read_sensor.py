@@ -7,6 +7,8 @@ logging.basicConfig(level=logging.INFO)
 
 def read_sensor():
     """ Reads temperature and humidity from the DHT22 sensor. Returns the values as a dictionary."""
+    
+    # Initialize the DHT22 sensor
     dhtDevice = adafruit_dht.DHT22(board.D2, use_pulseio=False)
     
     try:
