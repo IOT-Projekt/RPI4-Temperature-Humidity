@@ -61,8 +61,9 @@ def on_message(client, userdata, message):
         with lock:
             global send_message_interval
 
-            # Get frequency from payload and update the interval
-            payload = json.loads(message.payload.decode())["payload"]
+            # Get frequency from payload and update the interval. Example message structure: {"message": "{\"source\": \"kafka\", \"payload\": {\"frequency\": 5}}"}
+            json_string = message.payload.decode()["message"]
+            payload = json.loads(json_string)["payload"]
             send_message_interval = int(payload["frequency"])
 
             logging.info(f"Send interval changed to {send_message_interval} seconds")
