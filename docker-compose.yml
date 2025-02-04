@@ -13,6 +13,7 @@ services:
       - TOPIC_FREQUENCY=${TOPIC_FREQUENCY}
       - MQTT_USERNAME=${MQTT_USERNAME}
       - MQTT_PASSWORD=${MQTT_PASSWORD}
+      - DHT22_GPIO_PIN=${DHT22_GPIO_PIN}
       - CLIENT_ID=${CLIENT_ID}
     devices:
       - "/dev/:/dev/"  # Zugriff auf GPIO

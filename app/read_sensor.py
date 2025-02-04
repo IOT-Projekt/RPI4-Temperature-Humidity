@@ -2,14 +2,18 @@ import time
 import board
 import adafruit_dht
 import logging
+import os
 
 logging.basicConfig(level=logging.INFO)
 
 def read_sensor():
     """ Reads temperature and humidity from the DHT22 sensor. Returns the values as a dictionary."""
     
+    # Get the GPIO pin from the environment variable
+    gpio_pin = os.getenv('DHT22_GPIO_PIN', 'D2')
+
     # Initialize the DHT22 sensor
-    dhtDevice = adafruit_dht.DHT22(board.D2, use_pulseio=False)
+    dhtDevice = adafruit_dht.DHT22(getattr(board, gpio_pin), use_pulseio=False)
     
     try:
         temperature_c = dhtDevice.temperature
